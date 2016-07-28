@@ -9,9 +9,9 @@
 ## Clone
 
 Install TortoiseGit and git program for window platform.
-  URL: https://tortoisegit.org/
-  URL: https://git-scm.com/download/win 
-  To clone https://github.com/wosayttn/NuMaker_NuWicam_Samples.git
+   URL: https://tortoisegit.org/
+   URL: https://git-scm.com/download/win 
+   To clone https://github.com/wosayttn/NuMaker_NuWicam_Samples.git
 
 ## Document
 
