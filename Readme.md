@@ -4,14 +4,13 @@
 
 ## Requirement
 
-  Required Window host OS
+  Required Window OS
 
 ## Clone
 
-Install TortoiseGit and git program for window platform.
-   URL: https://tortoisegit.org/
-   URL: https://git-scm.com/download/win 
-   To clone https://github.com/wosayttn/NuMaker_NuWicam_Samples.git
+1. Install TortoiseGit and git program for window platform. ( URL: https://tortoisegit.org/ && https://git-scm.com/download/win ) 
+
+2. Clone https://github.com/wosayttn/NuMaker_NuWicam_Samples.git
 
 ## Document
 
