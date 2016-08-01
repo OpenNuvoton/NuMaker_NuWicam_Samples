@@ -1,10 +1,14 @@
 /**
  *  Nuvoton NuMaker NuWicam Arduino sample code.
+ *  Tested on:
+ *    NuEdu M451 board
+ *    NuEdu UNO board
+ *    Geduino UNO board
  *
  *  The purpose of this example is to link the Arduino digital and analog
  *  pins to an external device.
  */
- 
+
 #include <Wire.h>
 #include <ModbusRtu.h>
 
@@ -12,11 +16,11 @@
 enum {
   eData_MBInCounter,
   eData_MBOutCounter,
-  eData_MBError,  
-  eData_DI,
-  eData_DO,
-  eData_RGB,
-  eData_MBResistorVar,
+  eData_MBError,
+  eData_DI,              //unused
+  eData_DO,    
+  eData_RGB,             //unused
+  eData_MBResistorVar,   //unused
   eData_TemperatureSensor,
   eData_Cnt
 } E_DATA_TYPE;
@@ -29,7 +33,7 @@ int8_t state = 0;
 unsigned long tempus;
 
 // data array for modbus network sharing
-uint16_t au16data[eData_Cnt];
+uint16_t au16data[eData_Cnt] = {0};
 
 /**
  * pin maping:
@@ -37,17 +41,17 @@ uint16_t au16data[eData_Cnt];
  * 8, 9, 10, 11 - digital input
  * pin 13 is reserved to show a successful query
  */
- 
+
 // define i/o
 void io_setup() {
   int i;
-  for(i=2;i<8;i++)
+  for (i = 2; i < 8; i++)
   {
     pinMode(i, OUTPUT);
     digitalWrite(i, LOW );
   }
-    
-  for(i=8;i<12;i++)
+
+  for (i = 8; i < 12; i++)
     pinMode(i, INPUT);
 
   pinMode(13, OUTPUT);
@@ -59,7 +63,7 @@ void io_setup() {
  */
 void io_poll() {
   uint16_t tmp = ~au16data[eData_DO];
-  
+
   // get digital inputs -> au16data[eData_DI]
   bitWrite( au16data[eData_DI], 0, digitalRead( 8 ));
   bitWrite( au16data[eData_DI], 1, digitalRead( 9 ));
@@ -74,24 +78,27 @@ void io_poll() {
   digitalWrite( 6, bitRead( tmp, 4 ) );
   digitalWrite( 7, bitRead( tmp, 5 ) );
 
-  // read analog inputs
-  au16data[eData_TemperatureSensor] = analogRead( 0 ) / 9.71 ; //Tempeture.
+  // Read analog inputs
+  #if defined(__M451__) //The referece voltage on NuEdu M451 board is 3.3v. So the LM35's temperature formula is below
+    au16data[eData_TemperatureSensor] =  ( 3.3 * analogRead( 0 ) * 100.0) / 1024; //Tempeture
+  #else
+    au16data[eData_TemperatureSensor] =  ( 5.0 * analogRead( 0 ) * 100.0) / 1024; //Tempeture
+  #endif
   
   // diagnose communication
   au16data[eData_MBInCounter] = slave.getInCnt();
   au16data[eData_MBOutCounter] = slave.getOutCnt();
-  au16data[eData_MBError] = slave.getErrCnt(); 
+  au16data[eData_MBError] = slave.getErrCnt();
 }
 
 /**
  *  Setup procedure
  */
 void setup() {
-  analogReference(INTERNAL);
   io_setup(); // I/O settings
 
   // start communication
-  slave.begin( 115200 );
+  slave.begin( DEF_MB_BAUDRATE );
   tempus = millis() + 100;
   digitalWrite(13, HIGH );
 }
@@ -113,5 +120,5 @@ void loop() {
 
   // link the Arduino pins to the Modbus array
   io_poll();
-} 
+}
 
