@@ -1,9 +1,6 @@
 /**
  *  Nuvoton NuMaker NuWicam Arduino sample code.
- *  Tested on:
- *    NuEdu M451 board
  *    NuEdu UNO board
- *    Geduino UNO board
  *
  *  The purpose of this example is to link the Arduino digital and analog
  *  pins to an external device.
