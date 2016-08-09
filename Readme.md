@@ -4,7 +4,7 @@
 
 ## Requirement
 
-  Required Window OS
+  Required Window OS.
 
 ## Clone
 
